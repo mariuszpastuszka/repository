@@ -2,9 +2,12 @@ package pl.sda.repository.dao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import pl.sda.repository.domain.SdaUser;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +32,18 @@ public class UserDao {
     }
 
     public List<SdaUser> readAllUsers() {
+//        jdbcTemplate.query("" +
+//                        "select pesel, name, assigned_course, price, payed              " +
+//                        "from SDA_USER;                                                 ",
+//                new MyMapper());
+        jdbcTemplate.query("" +
+                "select pesel, name, assigned_course, price, payed              " +
+                "from SDA_USER;                                                 ",
+                (rs, num) -> new SdaUser(rs.getString("pesel"),
+                        rs.getString("name"),
+                        rs.getString("assigned_course"),
+                        rs.getDouble("price"),
+                        rs.getBoolean("payed")));
         log.info("readAllUsers()");
         return Collections.emptyList();
     }
@@ -41,5 +56,17 @@ public class UserDao {
     public boolean deleteUserByPesel(String pesel) {
         log.info("deleteUserByPesel() - pesel: [{}]", pesel);
         return false;
+    }
+
+    static class MyMapper implements RowMapper<SdaUser> {
+
+        @Override
+        public SdaUser mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new SdaUser(rs.getString("pesel"),
+                    rs.getString("name"),
+                    rs.getString("assigned_course"),
+                    rs.getDouble("price"),
+                    rs.getBoolean("payed"));
+        }
     }
 }
