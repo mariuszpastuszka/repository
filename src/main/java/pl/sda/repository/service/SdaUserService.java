@@ -18,4 +18,8 @@ public class SdaUserService {
     public List<SdaUser> allUsers() {
         return userDao.readAllUsers();
     }
+
+    public SdaUser findUserByPesel(String pesel) {
+        return userDao.findUserByPesel(pesel).orElse(new SdaUser());
+    }
 }
