@@ -19,6 +19,10 @@ import java.util.Optional;
 @Slf4j
 public class UserDao {
 
+    private static final String SELECT_ALL_QUERY = "" +
+            "select pesel, name, assigned_course, price, payed              " +
+            "from SDA_USER;                                                 ";
+
     private JdbcTemplate jdbcTemplate;
 
     public UserDao(JdbcTemplate jdbcTemplate) {
@@ -36,16 +40,15 @@ public class UserDao {
 //                        "select pesel, name, assigned_course, price, payed              " +
 //                        "from SDA_USER;                                                 ",
 //                new MyMapper());
-        jdbcTemplate.query("" +
-                "select pesel, name, assigned_course, price, payed              " +
-                "from SDA_USER;                                                 ",
+
+         List<SdaUser> result = jdbcTemplate.query(SELECT_ALL_QUERY,
                 (rs, num) -> new SdaUser(rs.getString("pesel"),
                         rs.getString("name"),
                         rs.getString("assigned_course"),
                         rs.getDouble("price"),
                         rs.getBoolean("payed")));
-        log.info("readAllUsers()");
-        return Collections.emptyList();
+        log.info("readAllUsers(): {}", result);
+        return result;
     }
 
     public Optional<SdaUser> findUserByPesel(String pesel) {
