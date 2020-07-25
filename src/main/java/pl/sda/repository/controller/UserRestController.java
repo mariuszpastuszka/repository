@@ -1,5 +1,6 @@
 package pl.sda.repository.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,5 +28,20 @@ public class UserRestController {
     @GetMapping("users/{pesel}")
     public SdaUser findUser(@PathVariable("pesel") String pesel) {
         return sdaUserService.findUserByPesel(pesel);
+    }
+
+    @GetMapping("users/v2/{pesel}")
+    public ResponseEntity<SdaUser> findUserV2(@PathVariable("pesel") String pesel) {
+
+        SdaUser foundUser = sdaUserService.findUserByPesel(pesel);
+
+        if (foundUser.getPesel() != null) {
+            return ResponseEntity.ok(foundUser);
+        }
+
+        return ResponseEntity
+                .badRequest()
+                .contentLength(0)
+                .build();
     }
 }

@@ -1,6 +1,7 @@
 package pl.sda.repository.dao;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -67,8 +68,16 @@ public class UserDao {
 
     public Optional<SdaUser> findUserByPesel(String pesel) {
         log.info("findUserByPesel() - pesel: [{}]", pesel);
-        SdaUser result = jdbcTemplate.queryForObject(USER_SELECT_QUERY, this::mapRowToUser, pesel);
-        return Optional.ofNullable(result);
+
+        Optional<SdaUser> result = Optional.empty();
+        try {
+            SdaUser queryResult = jdbcTemplate.queryForObject(USER_SELECT_QUERY, this::mapRowToUser, pesel);
+            return Optional.ofNullable(queryResult);
+        } catch (DataAccessException exc) {
+            // haha
+            log.warn("exception occurred during query for object", exc);
+        }
+        return result;
     }
 
     public Optional<SdaUser> findUserByPeselAndName(String pesel, String name) {
