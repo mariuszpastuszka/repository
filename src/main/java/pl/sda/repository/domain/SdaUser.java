@@ -14,6 +14,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+//@Document - for MongoDB
 @Table(name = "sda_user")
 // SdaUser - sda_user
 public class SdaUser {

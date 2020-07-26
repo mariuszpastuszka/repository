@@ -3,6 +3,7 @@ package pl.sda.repository.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.sda.repository.domain.SdaUser;
 import pl.sda.repository.service.SdaUserService;
@@ -43,5 +44,11 @@ public class UserRestController {
                 .badRequest()
                 .contentLength(0)
                 .build();
+    }
+
+    @GetMapping("users-pageable")
+    public List<SdaUser> usersPageable(@RequestParam(value = "page", defaultValue = "0") int page,
+                                       @RequestParam(value = "size", defaultValue = "1") int size) {
+        return sdaUserService.findAllUsersWithPageable(page, size);
     }
 }
