@@ -1,5 +1,6 @@
 package pl.sda.repository.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 @Service
+@Slf4j
 public class SdaUserService {
 
     private UserDao userDao;
@@ -52,13 +54,20 @@ public class SdaUserService {
         SdaUser first = new SdaUser(LocalDateTime.now().toString(), "first", "Java", 10, true);
         SdaUser second = new SdaUser(LocalDateTime.now().toString(), "second", "Java", 10_000, true);
 //        myUserRepo.saveAll(List.of(first, second));
-        myUserRepo.save(first);
+        first = myUserRepo.save(first);
 
-        Random random = new Random();
-        if (random.nextInt() % 2 == 0) {
-            throw new RuntimeException();
-        }
-        myUserRepo.save(second);
+        myUserRepo.flush();
+//        Random random = new Random();
+//        if (random.nextInt() % 2 == 0) {
+//            throw new RuntimeException();
+//        }
+        second = myUserRepo.save(second);
+        log.info("changing object after saving...");
+
+        first.setName("Igor");
+        second.setName("Jola");
+
+
         return true;
     }
 
@@ -69,5 +78,10 @@ public class SdaUserService {
             sdaUser1.setName("Pamela");
         });
         return true;
+    }
+
+    public boolean changeUser2() {
+        log.info("changeUser2()");
+        return changeSdaUser();
     }
 }

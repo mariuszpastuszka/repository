@@ -65,4 +65,9 @@ public class UserRestController {
     public void changeName() {
         sdaUserService.changeSdaUser();
     }
+
+    @GetMapping("/pamela2")
+    public void changeName2() {
+        sdaUserService.changeUser2();
+    }
 }
