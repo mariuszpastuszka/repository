@@ -20,7 +20,7 @@ public class UserRestController {
         this.sdaUserService = sdaUserService;
     }
 
-    @GetMapping("users")
+    @GetMapping("/users")
     public List<SdaUser> readAllUsers() {
         return sdaUserService.allUsers();
     }
@@ -32,7 +32,7 @@ public class UserRestController {
         return sdaUserService.findUserByPesel(pesel);
     }
 
-    @GetMapping("users/v2/{pesel}")
+    @GetMapping("/users/v2/{pesel}")
     public ResponseEntity<SdaUser> findUserV2(@PathVariable("pesel") String pesel) {
 
         SdaUser foundUser = sdaUserService.findUserByPesel(pesel);
@@ -47,11 +47,17 @@ public class UserRestController {
                 .build();
     }
 
-    @GetMapping("users-pageable")
+    @GetMapping("/users-pageable")
     // /users-pageable == /users-pageable?page=0&size=1
     public SdaUserDto usersPageable(@RequestParam(value = "page", defaultValue = "0") int page,
                                     @RequestParam(value = "size", defaultValue = "1") int size) {
 
         return sdaUserService.findAllUsersWithPageable(page, size);
+    }
+
+    @GetMapping("/add-two-users")
+    public List<SdaUser> addUsersToDb() {
+        sdaUserService.addTwoSdaUsers();
+        return readAllUsers();
     }
 }

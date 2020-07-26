@@ -10,6 +10,7 @@ import pl.sda.repository.domain.SdaUser;
 import pl.sda.repository.dto.SdaUserDto;
 import pl.sda.repository.repo_spring.MyUserRepo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -44,4 +45,14 @@ public class SdaUserService {
                 .build();
     }
 
+    public boolean addTwoSdaUsers() {
+        SdaUser first = new SdaUser(LocalDateTime.now().toString(), "first", "Java", 10, true);
+        SdaUser second = new SdaUser(LocalDateTime.now().toString(), "second", "Java", 10_000, true);
+        myUserRepo.saveAll(List.of(first, second));
+        return true;
+    }
+
+    public boolean changeSdaUser() {
+        return true;
+    }
 }
