@@ -12,6 +12,7 @@ import pl.sda.repository.repo_spring.MyUserRepo;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class SdaUserService {
@@ -45,10 +46,18 @@ public class SdaUserService {
                 .build();
     }
 
+
     public boolean addTwoSdaUsers() {
         SdaUser first = new SdaUser(LocalDateTime.now().toString(), "first", "Java", 10, true);
         SdaUser second = new SdaUser(LocalDateTime.now().toString(), "second", "Java", 10_000, true);
-        myUserRepo.saveAll(List.of(first, second));
+//        myUserRepo.saveAll(List.of(first, second));
+        myUserRepo.save(first);
+
+        Random random = new Random();
+        if (random.nextInt() % 2 == 0) {
+            throw new RuntimeException();
+        }
+        myUserRepo.save(second);
         return true;
     }
 
