@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import pl.sda.repository.dao.UserDao;
 import pl.sda.repository.domain.SdaUser;
+import pl.sda.repository.dto.SdaUserDto;
 import pl.sda.repository.repo_spring.MyUserRepo;
 
 import java.util.List;
@@ -28,8 +29,13 @@ public class SdaUserService {
         return userDao.findUserByPesel(pesel).orElse(new SdaUser());
     }
 
-    public List<SdaUser> findAllUsersWithPageable(int pageNumber, int pageSize) {
+    public SdaUserDto findAllUsersWithPageable(int pageNumber, int pageSize) {
         Page<SdaUser> queryResult = myUserRepo.findAll(PageRequest.of(pageNumber, pageSize));
-        return queryResult.getContent();
+        return SdaUserDto.builder()
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .sdaUsers(queryResult.getContent())
+                .numberOfPages(queryResult.getTotalPages())
+                .build();
     }
 }
