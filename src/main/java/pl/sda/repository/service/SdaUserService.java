@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.sda.repository.dao.UserDao;
 import pl.sda.repository.domain.SdaUser;
 import pl.sda.repository.dto.SdaUserDto;
@@ -46,7 +47,7 @@ public class SdaUserService {
                 .build();
     }
 
-
+    @Transactional
     public boolean addTwoSdaUsers() {
         SdaUser first = new SdaUser(LocalDateTime.now().toString(), "first", "Java", 10, true);
         SdaUser second = new SdaUser(LocalDateTime.now().toString(), "second", "Java", 10_000, true);
@@ -61,7 +62,12 @@ public class SdaUserService {
         return true;
     }
 
+    @Transactional
     public boolean changeSdaUser() {
+        var sdaUser = myUserRepo.findById("11111111111111111111");
+        sdaUser.ifPresent(sdaUser1 -> {
+            sdaUser1.setName("Pamela");
+        });
         return true;
     }
 }
