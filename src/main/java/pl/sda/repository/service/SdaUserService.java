@@ -2,6 +2,8 @@ package pl.sda.repository.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.sda.repository.dao.UserDao;
 import pl.sda.repository.domain.SdaUser;
@@ -30,7 +32,10 @@ public class SdaUserService {
     }
 
     public SdaUserDto findAllUsersWithPageable(int pageNumber, int pageSize) {
-        Page<SdaUser> queryResult = myUserRepo.findAll(PageRequest.of(pageNumber, pageSize));
+        var sortOrder = Sort.by(Sort.Direction.ASC, "coursePrice")
+                .and(Sort.by(Sort.Direction.DESC, "name"));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortOrder);
+        Page<SdaUser> queryResult = myUserRepo.findAll(pageable);
         return SdaUserDto.builder()
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
@@ -38,4 +43,5 @@ public class SdaUserService {
                 .numberOfPages(queryResult.getTotalPages())
                 .build();
     }
+
 }
