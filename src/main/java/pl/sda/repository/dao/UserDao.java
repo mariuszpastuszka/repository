@@ -22,18 +22,18 @@ import java.util.Optional;
 public class UserDao {
 
     private static final String SELECT_ALL_QUERY = "" +
-            "select pesel, NAME1, assigned_course, price, payed              " +
+            "select pesel, NAME, assigned_course, price, payed              " +
             "from SDA_USER;                                                 ";
 
     private static final String USER_SELECT_QUERY = "" +
-            "select pesel, NAME1, assigned_course, price, payed              " +
+            "select pesel, NAME, assigned_course, price, payed              " +
             "from SDA_USER                                                  " +
             "where pesel = ?;                                               ";
 
     private static final String SELECT_USER_BY_PESEL_AND_NAME = "" +
-            "select pesel, NAME1, assigned_course, price, payed              " +
+            "select pesel, NAME, assigned_course, price, payed              " +
             "from SDA_USER                                                  " +
-            "where pesel = ? and NAME1 = ?;                                  ";
+            "where pesel = ? and NAME = ?;                                  ";
 
     private JdbcTemplate jdbcTemplate;
     private RowMapper<SdaUser> rowMapper = (rs, num) -> new SdaUser(rs.getString("pesel"),

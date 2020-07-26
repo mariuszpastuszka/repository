@@ -47,6 +47,7 @@ public class UserRestController {
     }
 
     @GetMapping("users-pageable")
+    // /users-pageable == /users-pageable?page=0&size=1
     public List<SdaUser> usersPageable(@RequestParam(value = "page", defaultValue = "0") int page,
                                        @RequestParam(value = "size", defaultValue = "1") int size) {
         return sdaUserService.findAllUsersWithPageable(page, size);
